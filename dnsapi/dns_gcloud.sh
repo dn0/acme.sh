@@ -122,6 +122,13 @@ _dns_gcloud_add_rrs() {
 }
 
 _dns_gcloud_find_zone() {
+  # Managed zone name set by the user has precedence
+  if [ -n "GCLOUD_ManagedZoneName" ]; then
+    managedZone="$GCLOUD_ManagedZoneName"
+	_debug "managedZone (set by user)" "$managedZone"
+    return 0
+  fi
+
   # Prepare a filter that matches zones that are suiteable for this entry.
   # For example, _acme-challenge.something.domain.com might need to go into something.domain.com or domain.com;
   # this function finds the longest postfix that has a managed zone.
